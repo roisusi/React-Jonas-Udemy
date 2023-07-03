@@ -8,7 +8,12 @@ Github:
 <span>
 <br>
 Resourses:
-<a href="https://codingheroes.io/resources/">Jonas Website </a>  
+<a href="https://codingheroes.io/resources/">Jonas Website</a>  
+</span>
+<span>
+<br>
+Discord:
+<a href="https://discord.com/invite/uhMkpf4">Discord</a>  
 </span>
 
 <br>
