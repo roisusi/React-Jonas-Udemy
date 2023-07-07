@@ -145,3 +145,22 @@ function getBook(id) {
 
 
 //Code
+const book = getBook(1);
+book;
+const { title, author , pages,publicationDate,genres,hasMovieAdaptation} = book;
+
+//Rest Operator
+const [generes1,generes2,...others] = genres;
+console.log(generes1,generes2)
+console.log(others)
+
+
+//Spread Operator
+//add to array
+const newGeneres = [...genres,"Epic Fantasy"];
+const newGeneres1 = ["Epic Fantasy",...genres];
+console.log(newGeneres)
+console.log(newGeneres1)
+//add to object
+const updatedBook = {...book,moviePublicationDate: "1996-08-01",pages:123}; //page override
+updatedBook;
