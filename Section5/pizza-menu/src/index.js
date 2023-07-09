@@ -48,8 +48,6 @@ const pizzaData = [
 ];
 
 const App = () => {
-  const x = 10;
-  console.log(x);
   return (
     <div className="container">
       <Header />
@@ -71,37 +69,25 @@ const Menu = () => {
   return (
     <main className="menu">
       <h2>Our menu</h2>
-      {/*<Pizza*/}
-      {/*  name="Pizza Spinaci"*/}
-      {/*  ingredient="Tomato, mozarella, spinach, and ricotta cheese"*/}
-      {/*  photoName="pizzas/spinaci.jpg"*/}
-      {/*  price="12"*/}
-      {/*/>*/}
-      {pizzaData.map((pizza) => {
-        return (
-          <Pizza
-            name={pizza.name}
-            ingredient={pizza.ingredients}
-            photoName={pizza.photoName}
-            price={pizza.price}
-            soldOut={pizza.soldOut}
-          />
-        );
-      })}
+      <ul className="pizzas">
+        {pizzaData.map((pizza) => {
+          return <Pizza data={pizza} key={pizza.name} />;
+        })}
+      </ul>
     </main>
   );
 };
 
 const Pizza = (props) => {
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt="spinaci" />
+    <li className="pizza">
+      <img src={props.data.photoName} alt={props.data.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredient}</p>
-        <span>{props.price}</span>
+        <h3>{props.data.name}</h3>
+        <p>{props.data.ingredients}</p>
+        <span>{props.data.price}</span>
       </div>
-    </div>
+    </li>
   );
 };
 const Footer = () => {
