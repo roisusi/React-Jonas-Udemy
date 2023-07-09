@@ -19,27 +19,13 @@
 </span>
 
 <br>
-<br>
-
-
-<h2>Lectures </h2>
 
 <span>
-Section 1 - Welcome,Welcome,Welcome (no code)
-
   <b>Install React:</b>
    <ul>
     <li><a href="https://nodejs.org/en/">NodeJS Website</a> download LTS</li> 
     <li>node -v : is version of the NodeJS</li> 
     <li>ESLint</li>
     <li>Prettier</li>
-  </ul>
-</span>
-
-<span>
-Section 3 - A First Look at React
-   <ul>
-    <li>Writing pure React in Index.html</li>
-    <li>npx create-react-app@5</li>
   </ul>
 </span>
