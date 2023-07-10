@@ -27,5 +27,6 @@
     <li>node -v : is version of the NodeJS</li> 
     <li>ESLint</li>
     <li>Prettier</li>
+    <li>Html Entity</li>
   </ul>
 </span>
