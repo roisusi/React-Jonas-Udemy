@@ -1,3 +1,4 @@
+
 const data = [
     {
         id: 1,
@@ -168,3 +169,9 @@ updatedBook;
 //Template Literals
 const summary = `Title: ${title}`
 console.log(summary)
+
+//Ternaries
+const hasMovieAdaptation1 = hasMovieAdaptation? "Yes" : "No";
+const p  = pages >1000 ? "Over than 1000" : "Less than  1000";
+
+console.log(hasMovieAdaptation1,p)

@@ -147,24 +147,46 @@ function getBook(id) {
 //Code
 const book = getBook(1);
 book;
-const { title, author , pages,publicationDate,genres,hasMovieAdaptation} = book;
+const {title, author, pages, publicationDate, genres, hasMovieAdaptation} = book;
 
 //Rest Operator
-const [generes1,generes2,...others] = genres;
-console.log(generes1,generes2)
+const [generes1, generes2, ...others] = genres;
+console.log(generes1, generes2)
 console.log(others)
 
 
 //Spread Operator
 //add to array
-const newGeneres = [...genres,"Epic Fantasy"];
-const newGeneres1 = ["Epic Fantasy",...genres];
+const newGeneres = [...genres, "Epic Fantasy"];
+const newGeneres1 = ["Epic Fantasy", ...genres];
 console.log(newGeneres)
 console.log(newGeneres1)
 //add to object
-const updatedBook = {...book,moviePublicationDate: "1996-08-01",pages:123}; //page override
+const updatedBook = {...book, moviePublicationDate: "1996-08-01", pages: 123}; //page override
 updatedBook;
 
 //Template Literals
 const summary = `Title: ${title}`
 console.log(summary)
+
+//Ternaries
+const hasMovieAdaptation1 = hasMovieAdaptation ? "Yes" : "No";
+const p = pages > 1000 ? "Over than 1000" : "Less than  1000";
+
+console.log(hasMovieAdaptation1, p)
+
+//Arrow Functions
+//1. Traditional Function - Function Expression
+function getYear(string) {
+    return string.split("-")[0];
+}
+
+console.log(getYear(publicationDate));
+//2. Arrow Function - Function Declaration
+const year = string => string.split("-")[0]; //without {} - no return needed
+const year2 = string => {
+    return string.split("-")[0]
+}; //return needed else undefined
+
+console.log(year(publicationDate));
+console.log(year2(publicationDate));
