@@ -16,7 +16,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("Inception");
+  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
   function handleSelectMovie(id) {
@@ -27,14 +27,27 @@ export default function App() {
     setSelectedId(null);
   }
 
+  function handleAddWatchMovie(movie) {
+    setWatched((watched) => [...watched, movie]);
+  }
+
+  function handleRemoveWatchMovie(id) {
+    setWatched((watched) =>
+      watched.filter((watchedMovie) => watchedMovie.imdbID !== id)
+    );
+  }
+
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setLoading(true);
           setError("");
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal }
           );
           if (!res.ok) {
             throw new Error("Something went wrong");
@@ -44,8 +57,11 @@ export default function App() {
             throw new Error("Movie Not Found");
           }
           setMovies(data.Search);
+          setError("");
         } catch (error) {
-          setError(error.message);
+          if (error.name !== "AbortError") {
+            setError(error.message);
+          }
         } finally {
           setLoading(false);
         }
@@ -56,11 +72,16 @@ export default function App() {
         setError("");
         return;
       }
-
+      handleCloseMovie();
       fetchMovies();
+
+      return function () {
+        controller.abort();
+      };
     },
     [query]
   );
+
   return (
     <>
       <NavBar>
@@ -82,11 +103,16 @@ export default function App() {
             <MovieDetails
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatchMovie={handleAddWatchMovie}
+              watched={watched}
             />
           ) : (
             <>
               <WatchSummary watched={watched} />
-              <WatchMovieList watched={watched} />
+              <WatchMovieList
+                watched={watched}
+                onRemovedMovie={handleRemoveWatchMovie}
+              />
             </>
           )}
         </Box>
@@ -103,9 +129,15 @@ function ErrorMessage({ message }) {
   return <p className="error">{message}</p>;
 }
 
-function MovieDetails({ selectedId, onCloseMovie }) {
+function MovieDetails({ selectedId, onCloseMovie, onAddWatchMovie, watched }) {
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
+
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  const userRated = watched.find(
+    (movie) => movie.imdbID === selectedId
+  )?.userRating;
   const {
     Actors: actors,
     Title: title,
@@ -118,6 +150,37 @@ function MovieDetails({ selectedId, onCloseMovie }) {
     Director: director,
     Genre: genre,
   } = movie;
+
+  function handleAddWatchMovie() {
+    const newMovie = {
+      imdbID: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0)),
+      userRating,
+    };
+    onAddWatchMovie(newMovie);
+    onCloseMovie();
+  }
+
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
+
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -133,6 +196,19 @@ function MovieDetails({ selectedId, onCloseMovie }) {
       getMovieDetails();
     },
     [selectedId]
+  );
+
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie |  ${title}`;
+
+      //cleanup function
+      return function () {
+        document.title = "usePopcorn";
+      };
+    },
+    [title]
   );
 
   return (
@@ -160,7 +236,24 @@ function MovieDetails({ selectedId, onCloseMovie }) {
           </header>
           <section>
             <div className="rating">
-              <StarRating maxRating={10} size={24} />
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button className="btn-add" onClick={handleAddWatchMovie}>
+                      + Add to List
+                    </button>
+                  )}{" "}
+                </>
+              ) : (
+                <p>
+                  You rated this movie {userRated} <span>⭐️</span>
+                </p>
+              )}
             </div>
             <p>
               <em>{plot}</em>
