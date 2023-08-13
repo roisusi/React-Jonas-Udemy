@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MovieList from "./MovieList";
+
 export default function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
   return (
