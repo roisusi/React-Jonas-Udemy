@@ -28,5 +28,8 @@
     <li>ESLint</li>
     <li>Prettier</li>
     <li>Html Entity</li>
+    <li>rsf snippets</li>
+    <li>For Vite - npm i eslint vite-plugin-eslint eslint-config-react-app --save-sev
+</li>
   </ul>
 </span>
