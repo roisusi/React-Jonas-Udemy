@@ -2,8 +2,10 @@ import styles from "../css/CountryList.module.css";
 import Spinner from "../pages/Spinner.jsx";
 import Message from "../pages/Message.jsx";
 import CountryItem from "../pages/CountryItem.jsx";
+import { useCities } from "../contexts/CitiesProvider.jsx";
 
-function CountryList({ cities, isLoading }) {
+function CountryList() {
+  const { cities, isLoading } = useCities();
   const countries = cities.reduce((arr, city) => {
     if (!arr.map((el) => el.country).includes(city.country)) {
       return [...arr, { country: city.country, emoji: city.emoji }];
@@ -12,7 +14,6 @@ function CountryList({ cities, isLoading }) {
     }
   }, []);
 
-  console.log(countries);
   if (isLoading) {
     return <Spinner />;
   }
