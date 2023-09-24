@@ -10,34 +10,37 @@ import CountryList from "./components/CountryList.jsx";
 import City from "./pages/City.jsx";
 import Form from "./pages/Form.jsx";
 import { CitiesProvider } from "./contexts/CitiesProvider.jsx";
+import { AuthProvider } from "./contexts/AuthProvider.jsx";
+import ProtectedRoute from "./pages/ProtectedRoute.jsx";
 
 
 function App() {
 
   return (
-    <CitiesProvider>
-      <BrowserRouter>
-        <Routes>
-          {/*<Route path="/" element={<Homepage />} />*/}
-          <Route index element={<Homepage />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/pricing" element={<Pricing />} />
+    <AuthProvider>
+      <CitiesProvider>
+        <BrowserRouter>
+          <Routes>
+            {/*<Route path="/" element={<Homepage />} />*/}
+            <Route index element={<Homepage />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/app" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+              {/*default route*/}
+              {/*we use <Navigate /> only for redirect*/}
+              <Route index element={<Navigate to={"cities"} replace={"cities"} />} />
+              <Route path="cities" element={<CityList />} />
+              <Route path="cities/:id" element={<City />} />
+              <Route path="countries" element={<CountryList />} />
+              <Route path="form" element={<Form />} />
+            </Route>
 
-          <Route path="/app" element={<AppLayout />}>
-            {/*default route*/}
-            {/*we use <Navigate /> only for redirect*/}
-            <Route index element={<Navigate to={"cities"} replace={"cities"} />} />
-            <Route path="cities" element={<CityList />} />
-            <Route path="cities/:id" element={<City />} />
-            <Route path="countries" element={<CountryList />} />
-            <Route path="form" element={<Form />} />
-          </Route>
-
-          <Route path="login" element={<Login />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </CitiesProvider>
+            <Route path="login" element={<Login />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CitiesProvider>
+    </AuthProvider>
   );
 }
 
